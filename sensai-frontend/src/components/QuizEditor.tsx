@@ -141,6 +141,34 @@ const QuizEditor = forwardRef<QuizEditorHandle, QuizEditorProps>(({
     scheduledPublishAt = null,
     onQuestionChangeWithUnsavedScorecardChanges,
 }, ref) => {
+    // Utility function to map frontend question types to API enum values
+    const mapQuestionTypeToAPI = (questionType: string): 'mcq' | 'saq' | 'coding' => {
+        switch (questionType) {
+            case 'objective':
+                return 'mcq'; // Multiple Choice Question
+            case 'subjective':
+                return 'saq'; // Short Answer Question
+            case 'coding':
+                return 'coding'; // Coding Question
+            default:
+                return 'mcq'; // Default fallback
+        }
+    };
+
+    // Utility function to map API question types back to frontend types
+    const mapQuestionTypeFromAPI = (apiQuestionType: string): 'objective' | 'subjective' => {
+        switch (apiQuestionType) {
+            case 'mcq':
+                return 'objective'; // Multiple Choice Question -> Objective
+            case 'saq':
+                return 'subjective'; // Short Answer Question -> Subjective
+            case 'coding':
+                return 'objective'; // Coding Question -> Objective (since frontend doesn't have coding type yet)
+            default:
+                return 'objective'; // Default fallback
+        }
+    };
+
     // For published quizzes: data is always fetched from the API
     // For draft quizzes: always start with empty questions
     // initialQuestions prop is no longer used
@@ -1725,7 +1753,7 @@ const QuizEditor = forwardRef<QuizEditorHandle, QuizEditorProps>(({
             // Format questions for the API
             const formattedQuestions = questions.map((question) => {
                 // Map questionType to API type
-                const questionType = question.config.questionType;
+                const questionType = mapQuestionTypeToAPI(question.config.questionType);
                 // Map inputType
                 const inputType = question.config.inputType
 
@@ -1817,7 +1845,7 @@ const QuizEditor = forwardRef<QuizEditorHandle, QuizEditorProps>(({
             // Format questions for the API
             const formattedQuestions = questions.map((question) => {
                 // Map questionType to API type
-                const questionType = question.config.questionType;
+                const questionType = mapQuestionTypeToAPI(question.config.questionType);
 
                 // Get input_type from the current config
                 const inputType = question.config.inputType;

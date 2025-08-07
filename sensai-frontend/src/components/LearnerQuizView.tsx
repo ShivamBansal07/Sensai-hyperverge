@@ -54,6 +54,20 @@ export default function LearnerQuizView({
     // Constant message for exam submission confirmation
     const EXAM_CONFIRMATION_MESSAGE = "Thank you for your submission. We will review it shortly";
 
+    // Utility function to map frontend question types to API enum values
+    const mapQuestionTypeToAPI = (questionType: string): 'mcq' | 'saq' | 'coding' => {
+        switch (questionType) {
+            case 'objective':
+                return 'mcq'; // Multiple Choice Question
+            case 'subjective':
+                return 'saq'; // Short Answer Question
+            case 'coding':
+                return 'coding'; // Coding Question
+            default:
+                return 'mcq'; // Default fallback
+        }
+    };
+
     // Add state for tracking view mode
     const [showLearnerView, setShowLearnerView] = useState(false);
 
@@ -777,11 +791,12 @@ export default function LearnerQuizView({
                         "blocks": validQuestions[currentQuestionIndex].content,
                         "response_type": validQuestions[currentQuestionIndex].config.responseType,
                         "answer": validQuestions[currentQuestionIndex].config.correctAnswer,
-                        "type": validQuestions[currentQuestionIndex].config.questionType,
+                        "type": mapQuestionTypeToAPI(validQuestions[currentQuestionIndex].config.questionType),
                         "input_type": validQuestions[currentQuestionIndex].config.inputType,
                         "scorecard_id": scorecardId,
                         "coding_languages": validQuestions[currentQuestionIndex].config.codingLanguages,
-                        "context": getKnowledgeBaseContent(validQuestions[currentQuestionIndex].config as QuizQuestionConfig)
+                        "context": getKnowledgeBaseContent(validQuestions[currentQuestionIndex].config as QuizQuestionConfig),
+                        "title": (validQuestions[currentQuestionIndex].config as any).title || `Question ${currentQuestionIndex + 1}`
                     },
                     user_id: userId,
                     task_id: taskId,

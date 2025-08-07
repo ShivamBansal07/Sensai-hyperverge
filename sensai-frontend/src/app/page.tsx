@@ -156,6 +156,32 @@ export default function Home() {
                 </div>
               )}
 
+              {/* AI Assessment Generator Feature */}
+              <div className="mb-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 text-center">
+                <div className="max-w-3xl mx-auto">
+                  <h2 className="text-2xl font-bold text-white mb-4">
+                    🎯 NEW: AI Question Generator
+                  </h2>
+                  <p className="text-blue-100 text-lg mb-6">
+                    Upload your PDF documents and instantly generate comprehensive questions for assessments using AI
+                  </p>
+                  <div className="flex justify-center gap-4">
+                    <button
+                      onClick={() => router.push('/assessment')}
+                      className="px-8 py-3 bg-white text-blue-600 text-sm font-semibold rounded-full hover:bg-gray-100 transition-colors inline-flex items-center gap-2"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      Try AI Question Generator
+                    </button>
+                  </div>
+                  <p className="text-blue-200 text-sm mt-3">
+                    Generate MCQ and Short Answer questions • Support for 5MB PDFs • Instant results
+                  </p>
+                </div>
+              </div>
+
               {/* Display content based on courses availability */}
               <div className="mb-8">
                 {!hasTeachingCourses && !hasLearningCourses ? (
