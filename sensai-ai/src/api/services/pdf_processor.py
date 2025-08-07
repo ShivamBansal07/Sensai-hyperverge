@@ -24,6 +24,7 @@ async def process_pdf(pdf_content: bytes, max_pages: int) -> QuestionBank:
 
     all_questions = []
     client = get_llm_client()
+    global_question_counter = 0  # Counter for unique question IDs
 
     for page_num in range(len(pdf_document)):
         logger.info(f"Processing page {page_num + 1} of {len(pdf_document)}")
@@ -58,9 +59,13 @@ async def process_pdf(pdf_content: bytes, max_pages: int) -> QuestionBank:
                 ],
             )
             
-            # Add the page number to each question for citation
+            # Add the page number to each question and assign unique IDs
             for question in question_bank_for_page.questions:
+                global_question_counter += 1
                 question.page_number = page_num + 1
+                # Generate unique question ID: original_type + global_counter
+                original_type = question.question_type.value  # 'mcq' or 'saq'
+                question.question_id = f"{original_type}_{global_question_counter}"
                 all_questions.append(question)
 
         except Exception as e:

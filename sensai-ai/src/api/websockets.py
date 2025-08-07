@@ -157,40 +157,21 @@ quiz_manager = QuizManager()
 
 @router.websocket("/ws/quiz/{session_id}")
 async def websocket_quiz(websocket: WebSocket, session_id: str):
-    # TODO: In a real application, retrieve the QuestionBank based on session_id
-    # For now, we'll use a mock QuestionBank for demonstration
-    mock_question_bank = QuestionBank(
-        questions=[
-            Question(
-                question_id="q1",
-                question_text="What is the capital of France?",
-                question_type=QuestionType.MCQ,
-                mcq_options=[
-                    MCQOption(option_id=1, text="Berlin", is_correct=False),
-                    MCQOption(option_id=2, text="Paris", is_correct=True),
-                    MCQOption(option_id=3, text="Rome", is_correct=False),
-                ],
-                ideal_answer=None,
-            ),
-            Question(
-                question_id="q2",
-                question_text="The chemical symbol for water is H2O. True or False?",
-                question_type=QuestionType.SAQ,
-                mcq_options=[],
-                ideal_answer="True",
-            ),
-            Question(
-                question_id="q3",
-                question_text="What is 2 + 2?",
-                question_type=QuestionType.SAQ,
-                mcq_options=[],
-                ideal_answer="4",
-            ),
-        ]
-    )
-
     try:
-        await quiz_manager.connect(websocket, session_id, mock_question_bank)
+        # The first message from the client should contain the QuestionBank
+        initial_data = await websocket.receive_json()
+        if initial_data.get("type") != "INIT_QUIZ":
+            await websocket.close(code=1008, reason="Invalid initial message")
+            return
+
+        question_bank_data = initial_data.get("payload", {}).get("question_bank")
+        if not question_bank_data:
+            await websocket.close(code=1008, reason="Missing question_bank in payload")
+            return
+
+        question_bank = QuestionBank.model_validate(question_bank_data)
+
+        await quiz_manager.connect(websocket, session_id, question_bank)
         while True:
             data = await websocket.receive_json()
             if data.get("type") == "SUBMIT_ANSWER":

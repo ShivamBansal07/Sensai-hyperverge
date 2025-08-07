@@ -742,7 +742,13 @@ class QuizSession(BaseModel):
 class IntegrityEvent(BaseModel):
     """Represents a single proctoring event flagged during a quiz session."""
     id: int
-    session_id: int
-    event_type: str # e.g., "PASTE_DETECTED", "UNUSUAL_TIMING"
-    details: Dict # e.g., {"question_id": 5, "time_taken_ms": 1500}
+    session_id: str # Changed to string to match frontend sessionId
+    event_type: str # e.g., "PASTE_DETECTED", "UNUSUAL_TIMING", "TAB_UNFOCUSED", "TAB_FOCUSED", "PAGE_UNLOADED"
+    details: Dict # e.g., {"question_id": 5, "time_taken_ms": 1500, "pasted_text": "..."}
     timestamp: datetime
+
+class IntegrityLog(BaseModel):
+    session_id: str
+    event_type: str
+    timestamp: int # Using timestamp from Date.now() in frontend
+    payload: Optional[Dict] = None
