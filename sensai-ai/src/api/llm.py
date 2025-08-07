@@ -3,14 +3,36 @@ import backoff
 import openai
 import instructor
 
-from openai import OpenAI
+from openai import OpenAI, AsyncOpenAI
 
 from pydantic import BaseModel
 
 from api.utils.logging import logger
+from api.settings import settings
 
 # Test log message
 logger.info("Logging system initialized")
+
+
+def get_llm_client():
+    """
+    Returns an instructor-patched AsyncOpenAI client.
+    """
+    api_key = settings.openai_api_key
+    base_url = settings.openai_base_url
+
+    logger.info(f"Creating AsyncOpenAI client with base_url: {base_url}")
+    if api_key:
+        logger.info(f"Using API Key starting with: {api_key[:5]}... and ending with: ...{api_key[-4:]}")
+    else:
+        logger.error("API Key is not set!")
+
+    return instructor.from_openai(
+        AsyncOpenAI(
+            api_key=api_key,
+            base_url=base_url,
+        )
+    )
 
 
 def is_reasoning_model(model: str) -> bool:

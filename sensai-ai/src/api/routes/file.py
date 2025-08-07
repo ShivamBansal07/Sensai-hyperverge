@@ -114,7 +114,13 @@ async def upload_file_locally(
 
         # Generate a unique filename
         file_uuid = str(uuid.uuid4())
-        file_extension = content_type.split("/")[1]
+        if "/" in content_type:
+            file_extension = content_type.split("/")[1]
+        else:
+            # Fallback if content_type is not in the expected format
+            logger.warning(f"Invalid content_type format: {content_type}. Using 'bin' as extension.")
+            file_extension = "bin" # Or raise an HTTPException if strict validation is needed
+
         filename = f"{file_uuid}.{file_extension}"
         file_path = os.path.join(settings.local_upload_folder, filename)
 

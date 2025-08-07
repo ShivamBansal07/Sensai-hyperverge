@@ -15,6 +15,7 @@ if os.path.exists(env_path):
 class Settings(BaseSettings):
     google_client_id: str
     openai_api_key: str
+    openai_base_url: str | None = None
     s3_bucket_name: str | None = None  # only relevant when running the code remotely
     s3_folder_name: str | None = None  # only relevant when running the code remotely
     local_upload_folder: str = (
@@ -38,16 +39,16 @@ def get_settings():
 
 settings = get_settings()
 
-if settings.phoenix_api_key is not None:
-    os.environ["PHOENIX_API_KEY"] = settings.phoenix_api_key
+# if settings.phoenix_api_key is not None:
+#     os.environ["PHOENIX_API_KEY"] = settings.phoenix_api_key
 
-tracer_provider = register(
-    protocol="http/protobuf",
-    project_name=f"sensai-{settings.env}",
-    auto_instrument=True,
-    batch=True,
-    endpoint=(
-        f"{settings.phoenix_endpoint}/v1/traces" if settings.phoenix_endpoint else None
-    ),
-)
-tracer = tracer_provider.get_tracer(__name__)
+# tracer_provider = register(
+#     protocol="http/protobuf",
+#     project_name=f"sensai-{settings.env}",
+#     auto_instrument=True,
+#     batch=True,
+#     endpoint=(
+#         f"{settings.phoenix_endpoint}/v1/traces" if settings.phoenix_endpoint else None
+#     ),
+# )
+# tracer = tracer_provider.get_tracer(__name__)

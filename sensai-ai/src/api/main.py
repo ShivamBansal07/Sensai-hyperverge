@@ -6,8 +6,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.exceptions import RequestValidationError
 import os
 from os.path import exists
-from api.config import UPLOAD_FOLDER_NAME
-from api.routes import (
+from .config import UPLOAD_FOLDER_NAME
+from .routes import (
     auth,
     code,
     cohort,
@@ -21,14 +21,15 @@ from api.routes import (
     file,
     ai,
     scorecard,
+    assessment,
 )
-from api.routes.ai import (
+from .routes.ai import (
     resume_pending_task_generation_jobs,
     resume_pending_course_structure_generation_jobs,
 )
-from api.websockets import router as websocket_router
-from api.scheduler import scheduler
-from api.settings import settings
+from .websockets import router as websocket_router
+from .scheduler import scheduler
+from .settings import settings
 import bugsnag
 from bugsnag.asgi import BugsnagMiddleware
 
@@ -116,6 +117,7 @@ app.include_router(milestone.router, prefix="/milestones", tags=["milestones"])
 app.include_router(scorecard.router, prefix="/scorecards", tags=["scorecards"])
 app.include_router(code.router, prefix="/code", tags=["code"])
 app.include_router(hva.router, prefix="/hva", tags=["hva"])
+app.include_router(assessment.router, prefix="/assessment", tags=["assessment"])
 app.include_router(websocket_router, prefix="/ws", tags=["websockets"])
 
 

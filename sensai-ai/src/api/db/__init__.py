@@ -476,7 +476,7 @@ async def init_db():
         cursor = await conn.cursor()
 
         if exists(sqlite_db_path):
-            # Check and create missing tables for existing databases
+           # Check and create missing tables for existing databases
             # This ensures all tables exist before any background tasks try to access them
             tables_to_check = [
                 (organizations_table_name, create_organizations_table),
