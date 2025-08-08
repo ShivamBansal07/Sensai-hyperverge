@@ -1,0 +1,185 @@
+{
+  "test_scenarios": {
+    "phase_1_models": {
+      "description": "Test Pydantic model validation",
+      "sample_data": {
+        "valid_semantic_evaluation": {
+          "correctness": 0.85,
+          "feedback_category": "partially_correct",
+          "reasoning": "Student shows understanding but lacks detail"
+        },
+        "valid_dynamic_feedback": {
+          "evaluation": "partially_correct",
+          "explanation_or_hint": "You're on the right track! What about the environmental benefits?",
+          "correct_answer": "Renewable energy reduces carbon emissions and provides sustainable power",
+          "requires_retry": true
+        },
+        "valid_saq_request": {
+          "question_text": "What are the benefits of renewable energy?",
+          "ideal_answer": "Renewable energy reduces carbon emissions, is sustainable, and decreases fossil fuel dependence",
+          "student_answer": "It's good for the environment",
+          "question_id": "q_renewable_001",
+          "session_id": "test_session_123"
+        }
+      }
+    },
+    "phase_3_api": {
+      "description": "Test API endpoint enhancement",
+      "sample_questions": [
+        {
+          "question_id": "q_photosynthesis_001",
+          "page_number": 1,
+          "question_type": "saq",
+          "question_text": "What is photosynthesis?",
+          "ideal_answer": "Photosynthesis is the process by which plants convert sunlight, water, and carbon dioxide into glucose and oxygen using chlorophyll"
+        },
+        {
+          "question_id": "q_water_cycle_001", 
+          "page_number": 2,
+          "question_type": "saq",
+          "question_text": "Explain the water cycle",
+          "ideal_answer": "The water cycle involves evaporation of water from surface bodies, condensation into clouds, precipitation as rain or snow, and collection back into water bodies"
+        },
+        {
+          "question_id": "q_capital_france_001",
+          "page_number": 3,
+          "question_type": "mcq",
+          "question_text": "What is the capital of France?",
+          "mcq_options": [
+            {"option_id": 1, "text": "London", "is_correct": false},
+            {"option_id": 2, "text": "Paris", "is_correct": true},
+            {"option_id": 3, "text": "Berlin", "is_correct": false},
+            {"option_id": 4, "text": "Madrid", "is_correct": false}
+          ]
+        }
+      ],
+      "test_answers": {
+        "photosynthesis": {
+          "correct": "Plants convert sunlight, water, and CO2 into glucose and oxygen using chlorophyll",
+          "partial": "Plants make food from sunlight",
+          "incorrect": "Plants breathe in oxygen"
+        },
+        "water_cycle": {
+          "correct": "Water evaporates, forms clouds, precipitates as rain, and returns to water bodies",
+          "partial": "Water goes up and comes down",
+          "incorrect": "Water just moves randomly"
+        }
+      }
+    },
+    "integration_test": {
+      "description": "Full end-to-end integration test scenarios",
+      "quiz_session": {
+        "session_id": "integration_test_session_001",
+        "questions": [
+          {
+            "question_id": "int_q_001",
+            "question_type": "saq",
+            "question_text": "What is the greenhouse effect?",
+            "ideal_answer": "The greenhouse effect is the process by which greenhouse gases trap heat in Earth's atmosphere, causing global warming",
+            "progressive_answers": [
+              {
+                "attempt": 1,
+                "answer": "Something about gases",
+                "expected_evaluation": "partially_correct",
+                "expected_hint": "You're on the right track! What do these gases do to heat?"
+              },
+              {
+                "attempt": 2,
+                "answer": "Gases trap heat in atmosphere",
+                "expected_evaluation": "partially_correct", 
+                "expected_hint": "Good! What's the result of this heat trapping?"
+              },
+              {
+                "attempt": 3,
+                "answer": "Greenhouse gases trap heat in Earth's atmosphere causing warming",
+                "expected_evaluation": "correct",
+                "expected_advance": true
+              }
+            ]
+          },
+          {
+            "question_id": "int_q_002",
+            "question_type": "mcq",
+            "question_text": "Which gas is most responsible for global warming?",
+            "mcq_options": [
+              {"option_id": 1, "text": "Oxygen", "is_correct": false},
+              {"option_id": 2, "text": "Carbon Dioxide", "is_correct": true},
+              {"option_id": 3, "text": "Nitrogen", "is_correct": false},
+              {"option_id": 4, "text": "Hydrogen", "is_correct": false}
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "expected_llm_responses": {
+    "semantic_evaluation_examples": [
+      {
+        "question": "What is photosynthesis?",
+        "ideal_answer": "Process where plants convert sunlight into energy",
+        "student_answer": "Plants make food from sunlight",
+        "expected_score": 0.7,
+        "expected_category": "partially_correct"
+      },
+      {
+        "question": "What is the capital of France?",
+        "ideal_answer": "Paris",
+        "student_answer": "Paris is the capital of France",
+        "expected_score": 0.95,
+        "expected_category": "correct"
+      },
+      {
+        "question": "Explain gravity", 
+        "ideal_answer": "Force that attracts objects toward Earth",
+        "student_answer": "I don't know",
+        "expected_score": 0.1,
+        "expected_category": "incorrect"
+      }
+    ],
+    "hint_generation_examples": [
+      {
+        "context": "partially_correct_photosynthesis",
+        "expected_patterns": [
+          "right track",
+          "good start",
+          "what about",
+          "consider"
+        ]
+      },
+      {
+        "context": "correct_answer",
+        "expected_patterns": [
+          "excellent",
+          "perfect",
+          "exactly right"
+        ]
+      }
+    ]
+  },
+  "error_scenarios": {
+    "invalid_model_data": [
+      {
+        "model": "SemanticEvaluationResult",
+        "invalid_data": {"correctness": 1.5, "feedback_category": "correct"},
+        "expected_error": "validation error"
+      },
+      {
+        "model": "DynamicFeedback",
+        "invalid_data": {"evaluation": "invalid_category"},
+        "expected_error": "literal validation error"
+      }
+    ],
+    "api_error_conditions": [
+      {
+        "scenario": "missing_question_id",
+        "request_data": {"answer": "test", "question_bank": {"questions": []}},
+        "expected_status": 422
+      },
+      {
+        "scenario": "llm_service_failure",
+        "mock_error": "OpenAI API error",
+        "expected_fallback": "simple string matching"
+      }
+    ]
+  }
+}

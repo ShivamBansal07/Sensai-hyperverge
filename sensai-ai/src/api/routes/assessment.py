@@ -1,8 +1,9 @@
 import asyncio
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from ..models import QuestionBank
-from ..models import Question, QuestionBank
+from ..models import Question, QuestionBank, SAQEvaluationRequest
 from ..services.pdf_processor import process_pdf
+from ..services.saq_evaluator import SAQEvaluatorService
 from ..utils.logging import logger
 from pydantic import BaseModel
 from typing import Optional
@@ -55,6 +56,7 @@ class QuizAnswer(BaseModel):
     question_bank: QuestionBank
     current_score: int = 0
     total_questions_answered: int = 0
+    session_id: Optional[str] = None  # Added for SAQ evaluation tracking
 
 class QuizFeedback(BaseModel):
     is_correct: bool
@@ -63,6 +65,12 @@ class QuizFeedback(BaseModel):
     final_score: Optional[str] = None
     new_score: Optional[int] = None
     new_total_questions_answered: Optional[int] = None
+    
+    # NEW FIELDS for enhanced SAQ evaluation
+    feedback_type: Optional[str] = None  # "correct", "partially_correct", "incorrect"
+    hint: Optional[str] = None  # For partially correct answers
+    explanation: Optional[str] = None  # Detailed feedback text
+    requires_retry: bool = False  # Whether user should try again
 
 @router.post("/integrity-log")
 async def receive_integrity_log(log: IntegrityLog):
@@ -87,19 +95,77 @@ async def answer_quiz_question(quiz_answer: QuizAnswer):
     correct_answer = None
     new_score = quiz_answer.current_score
     new_total_questions_answered = quiz_answer.total_questions_answered + 1
+    feedback_type = None
+    hint = None
+    explanation = None
+    requires_retry = False
 
     if current_question.question_type == 'mcq':
+        # Existing MCQ logic remains unchanged
         correct_option = next((opt for opt in current_question.mcq_options if opt.is_correct), None)
         if correct_option:
             correct_answer = correct_option.text
             if quiz_answer.answer == correct_option.text:
                 is_correct = True
                 new_score += 1
+                feedback_type = "correct"
+            else:
+                feedback_type = "incorrect"
+    
     elif current_question.question_type == 'saq':
-        correct_answer = current_question.ideal_answer
-        if correct_answer and quiz_answer.answer.lower() in correct_answer.lower():
-            is_correct = True
-            new_score += 1
+        # NEW: Enhanced SAQ evaluation using multi-step LLM process
+        if not quiz_answer.session_id:
+            logger.warning("No session_id provided for SAQ evaluation, using fallback")
+            session_id = f"fallback-{quiz_answer.question_id}"
+        else:
+            session_id = quiz_answer.session_id
+            
+        try:
+            # Initialize SAQ evaluator service
+            evaluator = SAQEvaluatorService()
+            
+            # Create evaluation request
+            evaluation_request = SAQEvaluationRequest(
+                question_text=current_question.question_text,
+                ideal_answer=current_question.ideal_answer or "No ideal answer provided",
+                student_answer=quiz_answer.answer,
+                question_id=quiz_answer.question_id,
+                session_id=session_id
+            )
+            
+            # Perform enhanced SAQ evaluation
+            feedback = await evaluator.evaluate_saq_complete(evaluation_request)
+            
+            # Map evaluation results to response
+            feedback_type = feedback.evaluation
+            explanation = feedback.explanation_or_hint
+            correct_answer = feedback.correct_answer
+            requires_retry = feedback.requires_retry
+            
+            # Determine if answer is "correct enough" to proceed and award points
+            if feedback.evaluation == "correct":
+                is_correct = True
+                new_score += 1
+            elif feedback.evaluation == "partially_correct":
+                # For partially correct, don't advance question but show hint
+                hint = feedback.explanation_or_hint
+                # Don't award points yet, but also don't mark as incorrect
+                is_correct = False
+                requires_retry = True
+            else:  # incorrect
+                is_correct = False
+                
+        except Exception as e:
+            logger.error(f"Error in enhanced SAQ evaluation: {e}")
+            # Fallback to simple string matching
+            correct_answer = current_question.ideal_answer
+            if correct_answer and quiz_answer.answer.lower() in correct_answer.lower():
+                is_correct = True
+                new_score += 1
+                feedback_type = "correct"
+            else:
+                feedback_type = "incorrect"
+            explanation = "Using fallback evaluation due to error"
 
     # Simple progression logic with unique question IDs
     current_index = -1
@@ -109,11 +175,15 @@ async def answer_quiz_question(quiz_answer: QuizAnswer):
             break
 
     next_question = None
-    if current_index != -1 and current_index + 1 < len(question_bank.questions):
+    # Only advance to next question if not requiring retry
+    if not requires_retry and current_index != -1 and current_index + 1 < len(question_bank.questions):
         next_question = question_bank.questions[current_index + 1]
+    elif requires_retry:
+        # For partially correct SAQ answers, stay on same question
+        next_question = current_question
 
     final_score = None
-    if not next_question:
+    if not next_question and not requires_retry:
         final_score = f"Quiz Complete! Your score: {new_score}/{new_total_questions_answered}"
 
     return QuizFeedback(
@@ -123,4 +193,8 @@ async def answer_quiz_question(quiz_answer: QuizAnswer):
         final_score=final_score,
         new_score=new_score,
         new_total_questions_answered=new_total_questions_answered,
+        feedback_type=feedback_type,
+        hint=hint,
+        explanation=explanation,
+        requires_retry=requires_retry,
     )

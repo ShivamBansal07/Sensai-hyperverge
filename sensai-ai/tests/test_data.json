@@ -1,0 +1,182 @@
+{
+  "test_scenarios": {
+    "saq_evaluation": {
+      "easy_questions": [
+        {
+          "question": "What is the capital of France?",
+          "ideal_answer": "Paris",
+          "student_answers": {
+            "correct": [
+              "Paris",
+              "The capital of France is Paris",
+              "Paris is the capital"
+            ],
+            "partially_correct": [
+              "It's in France",
+              "A big city in France", 
+              "French capital",
+              "The main city"
+            ],
+            "incorrect": [
+              "London",
+              "Rome",
+              "Madrid",
+              "I don't know"
+            ]
+          }
+        },
+        {
+          "question": "What color do you get when you mix red and blue?",
+          "ideal_answer": "Purple",
+          "student_answers": {
+            "correct": [
+              "Purple",
+              "You get purple",
+              "Purple color"
+            ],
+            "partially_correct": [
+              "A dark color",
+              "Mixed color", 
+              "New color"
+            ],
+            "incorrect": [
+              "Green",
+              "Yellow",
+              "Orange"
+            ]
+          }
+        }
+      ],
+      "medium_questions": [
+        {
+          "question": "Explain the process of photosynthesis.",
+          "ideal_answer": "Photosynthesis is the process where plants convert sunlight, water, and carbon dioxide into glucose and oxygen using chlorophyll.",
+          "student_answers": {
+            "correct": [
+              "Plants convert sunlight, water, and CO2 into glucose and oxygen using chlorophyll",
+              "Photosynthesis is when plants use sunlight, water, and carbon dioxide to make glucose and oxygen with chlorophyll",
+              "Plants make food (glucose) from sunlight, water, and CO2, releasing oxygen in the process"
+            ],
+            "partially_correct": [
+              "Plants make food from sunlight",
+              "Plants use sunlight and water to make energy",
+              "Chlorophyll helps plants make food from light",
+              "Plants take in CO2 and release oxygen"
+            ],
+            "incorrect": [
+              "Plants breathe like animals",
+              "Plants eat soil for nutrition",
+              "Sunlight makes plants grow bigger"
+            ]
+          }
+        },
+        {
+          "question": "What are the three states of matter?",
+          "ideal_answer": "The three states of matter are solid, liquid, and gas.",
+          "student_answers": {
+            "correct": [
+              "Solid, liquid, and gas",
+              "The three states are solid, liquid, and gas",
+              "Matter exists as solid, liquid, or gas"
+            ],
+            "partially_correct": [
+              "Solid and liquid and something else",
+              "Ice, water, and steam",
+              "Hard, wet, and air"
+            ],
+            "incorrect": [
+              "Hot, cold, warm",
+              "Big, medium, small", 
+              "I don't know"
+            ]
+          }
+        }
+      ],
+      "hard_questions": [
+        {
+          "question": "Analyze the economic implications of renewable energy adoption on traditional energy sectors.",
+          "ideal_answer": "Renewable energy adoption creates economic disruption in traditional sectors through job displacement, stranded assets, and market restructuring, while generating new opportunities in green technology, manufacturing, and services. The transition requires careful policy management to ensure equitable distribution of costs and benefits.",
+          "student_answers": {
+            "correct": [
+              "Renewable energy disrupts traditional energy sectors by displacing jobs and creating stranded assets, while creating new opportunities in green technology. This requires careful policy management for equitable transition.",
+              "The shift to renewables causes economic disruption in fossil fuel industries through job losses and stranded infrastructure, but creates new green jobs and markets. Policy intervention is needed for fair transition.",
+              "Traditional energy sectors face displacement and asset devaluation from renewable adoption, while new green industries emerge. Managing this transition equitably requires strategic policy approaches."
+            ],
+            "partially_correct": [
+              "Renewable energy creates new jobs but also eliminates some traditional energy jobs",
+              "There are economic benefits and costs when switching to renewable energy",
+              "Traditional energy companies might struggle while renewable companies grow",
+              "Some people lose jobs in coal/oil but gain jobs in solar/wind"
+            ],
+            "incorrect": [
+              "Renewable energy is just better for the environment",
+              "It's more expensive than traditional energy",
+              "Only affects electricity bills"
+            ]
+          }
+        }
+      ]
+    },
+    "feedback_scenarios": {
+      "encouragement_patterns": [
+        "You're on the right track! {hint}",
+        "Great start! {hint}",
+        "You have the basic idea. {hint}",
+        "Good thinking! {hint}"
+      ],
+      "correction_patterns": [
+        "Not quite right. The correct answer is: {correct_answer}",
+        "That's incorrect. {correct_answer} is the right answer.",
+        "Close, but {correct_answer} is what we're looking for."
+      ]
+    },
+    "integration_flows": [
+      {
+        "name": "Progressive Learning Flow",
+        "description": "Student gets better with hints",
+        "sequence": [
+          {
+            "attempt": 1,
+            "answer": "Plants make food from sunlight",
+            "expected_evaluation": "partially_correct",
+            "expected_hint": "You're on the right track! What raw materials do plants use besides sunlight?"
+          },
+          {
+            "attempt": 2, 
+            "answer": "Plants use sunlight and water to make food",
+            "expected_evaluation": "partially_correct",
+            "expected_hint": "Getting closer! What gas do plants take from the air, and what do they release?"
+          },
+          {
+            "attempt": 3,
+            "answer": "Plants use sunlight, water, and CO2 to make glucose and release oxygen",
+            "expected_evaluation": "correct",
+            "expected_hint": "Excellent! You've got the complete process."
+          }
+        ]
+      },
+      {
+        "name": "Immediate Success Flow",
+        "description": "Student gets it right first try",
+        "sequence": [
+          {
+            "attempt": 1,
+            "answer": "Paris",
+            "expected_evaluation": "correct",
+            "expected_hint": "Perfect! That's exactly right."
+          }
+        ]
+      }
+    ]
+  },
+  "performance_benchmarks": {
+    "llm_response_time_ms": {
+      "semantic_evaluation": 1500,
+      "hint_generation": 1200,
+      "complete_pipeline": 2000
+    },
+    "api_response_time_ms": {
+      "quiz_answer_endpoint": 3000
+    }
+  }
+}

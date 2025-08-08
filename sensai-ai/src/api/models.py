@@ -752,3 +752,27 @@ class IntegrityLog(BaseModel):
     event_type: str
     timestamp: int # Using timestamp from Date.now() in frontend
     payload: Optional[Dict] = None
+
+# --- Enhanced SAQ Evaluation Models ---
+# For multi-step SAQ evaluation with semantic analysis and dynamic feedback
+
+class SemanticEvaluationResult(BaseModel):
+    """Result of semantic evaluation comparing student answer to ideal answer."""
+    correctness: float = Field(ge=0.0, le=1.0, description="Semantic similarity score")
+    feedback_category: Literal["correct", "partially_correct", "incorrect"]
+    reasoning: Optional[str] = Field(description="Internal reasoning for score")
+
+class DynamicFeedback(BaseModel):
+    """Complete feedback package for SAQ evaluation."""
+    evaluation: Literal["correct", "partially_correct", "incorrect"]
+    explanation_or_hint: str = Field(description="AI-generated feedback text")
+    correct_answer: str = Field(description="Reference correct answer")
+    requires_retry: bool = Field(default=False, description="Whether user can try again")
+
+class SAQEvaluationRequest(BaseModel):
+    """Request payload for evaluating a Short Answer Question."""
+    question_text: str
+    ideal_answer: str
+    student_answer: str
+    question_id: str
+    session_id: str
