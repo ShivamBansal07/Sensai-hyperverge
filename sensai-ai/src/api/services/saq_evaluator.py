@@ -1,9 +1,10 @@
 import instructor
-from openai import OpenAI
+from openai import AsyncOpenAI
 from typing import Optional
 from ..models import SemanticEvaluationResult, DynamicFeedback, SAQEvaluationRequest
 from ..llm import get_llm_client
 from ..utils.logging import logger
+from ..settings import settings
 
 
 class SAQEvaluatorService:
@@ -13,7 +14,14 @@ class SAQEvaluatorService:
     """
     
     def __init__(self):
+        # Get the instructor-patched AsyncOpenAI client for structured outputs
         self.client = get_llm_client()
+        # Create regular AsyncOpenAI client for basic completions using environment variables
+        self.regular_client = AsyncOpenAI(
+            base_url=settings.openai_base_url,
+            api_key=settings.openai_api_key
+        )
+        logger.info("SAQEvaluatorService initialized with AsyncOpenAI client")
     
     async def semantic_evaluation(self, question: str, ideal_answer: str, student_answer: str) -> SemanticEvaluationResult:
         """
@@ -28,8 +36,7 @@ class SAQEvaluatorService:
             SemanticEvaluationResult with correctness score and feedback category
         """
         try:
-            # Create Instructor client for structured output
-            instructor_client = instructor.from_openai(self.client)
+            logger.info(f"Starting semantic evaluation for question: {question[:30]}...")
             
             # Semantic evaluation prompt
             prompt = f"""
@@ -44,17 +51,24 @@ STUDENT'S ANSWER: {student_answer}
 EVALUATION CRITERIA:
 - 1.0: Perfect match or complete semantic equivalence
 - 0.9-0.99: Correct with minor wording differences
-- 0.7-0.89: Mostly correct, missing minor details
-- 0.5-0.69: Partially correct, has key concepts but incomplete
-- 0.3-0.49: Has some relevant content but significant gaps
-- 0.0-0.29: Incorrect or completely off-topic
+- 0.8-0.89: Mostly correct, missing minor details
+- 0.6-0.79: Partially correct, has key concepts but incomplete or missing important details
+- 0.3-0.59: Has some relevant content but significant gaps or misunderstandings
+- 0.0-0.29: Incorrect, completely off-topic, or nonsensical (single letters, gibberish, etc.)
+
+IMPORTANT RULES:
+- Single letters, random characters, or gibberish should score 0.0-0.2
+- Very short answers (1-3 words) that don't capture the main concept should score low
+- Only award partial credit (0.6+) if the answer shows genuine understanding of key concepts
+- Be strict with semantic evaluation - "close" is not good enough for partial credit
 
 Respond with a structured evaluation focusing on semantic meaning, not exact wording.
 Provide your reasoning for the score in the reasoning field.
 """
 
-            result = await instructor_client.chat.completions.create(
-                model="gpt-4o-mini",
+            # Use the instructor-patched client directly
+            result = await self.client.chat.completions.create(
+                model="openai/gpt-4o-mini",
                 response_model=SemanticEvaluationResult,
                 messages=[
                     {"role": "system", "content": "You are an expert grading assistant that evaluates semantic similarity between student answers and ideal answers."},
@@ -63,18 +77,14 @@ Provide your reasoning for the score in the reasoning field.
                 temperature=0.1  # Low temperature for consistent grading
             )
             
-            logger.info(f"Semantic evaluation completed: {result.correctness:.2f} ({result.feedback_category})")
+            logger.info(f"Semantic evaluation complete - Score: {result.correctness:.2f}, Category: {result.feedback_category}")
             return result
             
         except Exception as e:
             logger.error(f"Error in semantic evaluation: {e}")
-            # Fallback to basic evaluation
-            return SemanticEvaluationResult(
-                correctness=0.5,
-                feedback_category="partially_correct",
-                reasoning=f"Error in evaluation: {str(e)}"
-            )
-    
+            # Instead of fallback, raise the exception so main route can handle it
+            raise Exception(f"LLM semantic evaluation failed: {str(e)}")
+            
     async def generate_dynamic_feedback(self, 
                                       evaluation_result: SemanticEvaluationResult, 
                                       question: str, 
@@ -98,10 +108,10 @@ Provide your reasoning for the score in the reasoning field.
                 explanation = self._generate_correct_feedback()
                 requires_retry = False
                 
-            elif evaluation_result.correctness >= 0.5:
-                # Partially correct - generate encouraging hint
+            elif evaluation_result.correctness >= 0.6:
+                # Partially correct - generate encouraging feedback with RETRY enabled
                 explanation = await self._generate_hint(question, ideal_answer, student_answer, evaluation_result.correctness)
-                requires_retry = True
+                requires_retry = True  # Re-enable retry logic for partially correct answers
                 
             else:
                 # Incorrect - provide correct answer and brief explanation
@@ -188,8 +198,8 @@ Your student is close but needs a gentle push. Generate a SHORT, encouraging hin
 Example: "You're definitely on the right track with X! What about the aspect related to Y that we discussed earlier?"
 """
 
-            response = await self.client.chat.completions.create(
-                model="gpt-4o-mini",
+            response = await self.regular_client.chat.completions.create(
+                model="openai/gpt-4o-mini",
                 messages=[
                     {"role": "system", "content": "You are a motivating tutor who gives encouraging hints to students who are partially correct."},
                     {"role": "user", "content": hint_prompt}
@@ -205,31 +215,32 @@ Example: "You're definitely on the right track with X! What about the aspect rel
             return f"You're on the right track! Think about what else might be important to include in your answer."
     
     async def _generate_incorrect_feedback(self, question: str, ideal_answer: str, student_answer: str) -> str:
-        """Generate feedback for incorrect answers."""
+        """Generate detailed feedback for incorrect answers explaining why it's wrong."""
         try:
             feedback_prompt = f"""
-Generate a brief, constructive explanation for why the student's answer is incorrect.
+You are an expert tutor providing clear, educational feedback on incorrect answers.
 
 Question: {question}
 Student's Answer: {student_answer}
 Correct Answer: {ideal_answer}
 
-Provide a short explanation (1-2 sentences) that:
-1. Briefly explains why the answer is incorrect
-2. Points toward the correct answer
-3. Is encouraging and educational
+Generate a clear explanation (2-3 sentences) that:
+1. Explains specifically why the student's answer is incorrect
+2. Explains why the correct answer is right
+3. Helps the student understand the key concept they missed
+4. Uses educational, encouraging tone
 
-Keep it concise and helpful.
+Focus on the reasoning and conceptual understanding, not just stating facts.
 """
 
-            response = await self.client.chat.completions.create(
-                model="gpt-4o-mini",
+            response = await self.regular_client.chat.completions.create(
+                model="openai/gpt-4o-mini",
                 messages=[
-                    {"role": "system", "content": "You are a helpful tutor providing constructive feedback on incorrect answers."},
+                    {"role": "system", "content": "You are an expert tutor who provides clear explanations for why answers are incorrect and helps students understand the correct reasoning."},
                     {"role": "user", "content": feedback_prompt}
                 ],
                 temperature=0.3,
-                max_tokens=150
+                max_tokens=200
             )
             
             explanation = response.choices[0].message.content.strip()

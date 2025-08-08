@@ -1,0 +1,514 @@
+{
+  "questions": [
+    {
+      "question_id": "mcq_1",
+      "page_number": 1,
+      "question_type": "mcq",
+      "question_text": "What is meant by 'goods' in the context of the text?",
+      "mcq_options": [
+        {
+          "option_id": 1,
+          "text": "Intangible tasks performed for satisfaction",
+          "is_correct": false
+        },
+        {
+          "option_id": 2,
+          "text": "Physical, tangible objects used to satisfy wants",
+          "is_correct": true
+        },
+        {
+          "option_id": 3,
+          "text": "Skills provided by individuals in society",
+          "is_correct": false
+        },
+        {
+          "option_id": 4,
+          "text": "Money earned for providing services",
+          "is_correct": false
+        }
+      ],
+      "ideal_answer": null
+    },
+    {
+      "question_id": "mcq_2",
+      "page_number": 1,
+      "question_type": "mcq",
+      "question_text": "Which resource is NOT mentioned as being owned by individuals in the text?",
+      "mcq_options": [
+        {
+          "option_id": 1,
+          "text": "Land",
+          "is_correct": false
+        },
+        {
+          "option_id": 2,
+          "text": "Labour services",
+          "is_correct": false
+        },
+        {
+          "option_id": 3,
+          "text": "Money",
+          "is_correct": true
+        },
+        {
+          "option_id": 4,
+          "text": "Farming implements",
+          "is_correct": false
+        }
+      ],
+      "ideal_answer": null
+    },
+    {
+      "question_id": "saq_3",
+      "page_number": 1,
+      "question_type": "saq",
+      "question_text": "Describe the main idea behind resource allocation in a simple economy as presented in the text.",
+      "mcq_options": null,
+      "ideal_answer": "In a simple economy, individuals and families have limited resources and can produce goods and services to satisfy their needs. They exchange their produce to obtain other goods and services they require, demonstrating how resources are allocated among various decision-making units in society."
+    },
+    {
+      "question_id": "saq_4",
+      "page_number": 1,
+      "question_type": "saq",
+      "question_text": "What is the difference between goods and services according to the text?",
+      "mcq_options": null,
+      "ideal_answer": "Goods are physical, tangible objects that satisfy wants and needs, while services are intangible tasks performed that provide satisfaction."
+    },
+    {
+      "question_id": "mcq_5",
+      "page_number": 2,
+      "question_type": "mcq",
+      "question_text": "What economic problem arises due to the scarcity of resources?",
+      "mcq_options": [
+        {
+          "option_id": 1,
+          "text": "Inflation",
+          "is_correct": false
+        },
+        {
+          "option_id": 2,
+          "text": "Unemployment",
+          "is_correct": false
+        },
+        {
+          "option_id": 3,
+          "text": "Choice",
+          "is_correct": true
+        },
+        {
+          "option_id": 4,
+          "text": "Surplus",
+          "is_correct": false
+        }
+      ],
+      "ideal_answer": null
+    },
+    {
+      "question_id": "mcq_6",
+      "page_number": 2,
+      "question_type": "mcq",
+      "question_text": "What must society ensure regarding the production of goods and services?",
+      "mcq_options": [
+        {
+          "option_id": 1,
+          "text": "Production must exceed consumption",
+          "is_correct": false
+        },
+        {
+          "option_id": 2,
+          "text": "Production should match collective consumption needs",
+          "is_correct": true
+        },
+        {
+          "option_id": 3,
+          "text": "Production should focus solely on luxury goods",
+          "is_correct": false
+        },
+        {
+          "option_id": 4,
+          "text": "Production should ignore consumer demand",
+          "is_correct": false
+        }
+      ],
+      "ideal_answer": null
+    },
+    {
+      "question_id": "saq_7",
+      "page_number": 2,
+      "question_type": "saq",
+      "question_text": "Explain the significance of resource allocation in an economy.",
+      "mcq_options": null,
+      "ideal_answer": "Resource allocation is crucial in an economy as it determines the distribution of scarce resources among various goods and services, ensuring that production aligns with the collective wants and needs of society. Proper allocation helps address the basic economic problems of scarcity, choice, and efficiency."
+    },
+    {
+      "question_id": "saq_8",
+      "page_number": 2,
+      "question_type": "saq",
+      "question_text": "What are the two basic economic problems faced by society?",
+      "mcq_options": null,
+      "ideal_answer": "The two basic economic problems faced by society are the allocation of limited resources and the distribution of the final mix of goods and services."
+    },
+    {
+      "question_id": "mcq_9",
+      "page_number": 3,
+      "question_type": "mcq",
+      "question_text": "What is the primary problem that every economy faces, according to the text?",
+      "mcq_options": [
+        {
+          "option_id": 1,
+          "text": "Deciding on the type of government to implement.",
+          "is_correct": false
+        },
+        {
+          "option_id": 2,
+          "text": "Allocating scarce resources to the production of goods and services.",
+          "is_correct": true
+        },
+        {
+          "option_id": 3,
+          "text": "Choosing which luxury goods to produce and sell.",
+          "is_correct": false
+        },
+        {
+          "option_id": 4,
+          "text": "Determining how to reduce the population size.",
+          "is_correct": false
+        }
+      ],
+      "ideal_answer": null
+    },
+    {
+      "question_id": "mcq_10",
+      "page_number": 3,
+      "question_type": "mcq",
+      "question_text": "What is described as the collection of all possible combinations of goods and services produced from given resources?",
+      "mcq_options": [
+        {
+          "option_id": 1,
+          "text": "Supply and Demand Curve",
+          "is_correct": false
+        },
+        {
+          "option_id": 2,
+          "text": "Production Possibility Set",
+          "is_correct": true
+        },
+        {
+          "option_id": 3,
+          "text": "Economic Growth Model",
+          "is_correct": false
+        },
+        {
+          "option_id": 4,
+          "text": "Resource Allocation Framework",
+          "is_correct": false
+        }
+      ],
+      "ideal_answer": null
+    },
+    {
+      "question_id": "saq_11",
+      "page_number": 3,
+      "question_type": "saq",
+      "question_text": "Explain the significance of the Production Possibility Frontier in economics.",
+      "mcq_options": null,
+      "ideal_answer": "The Production Possibility Frontier illustrates the maximum possible output combinations of two goods that can be produced with available resources and technology. It helps to understand trade-offs, opportunity costs, and the economic efficiency of resource allocation."
+    },
+    {
+      "question_id": "saq_12",
+      "page_number": 3,
+      "question_type": "saq",
+      "question_text": "What factors must a society consider when deciding the allocation of scarce resources?",
+      "mcq_options": null,
+      "ideal_answer": "A society must consider factors such as the type and quantity of goods and services to be produced, the use of resources for production versus consumption, technological choices, and distribution among individuals."
+    },
+    {
+      "question_id": "mcq_13",
+      "page_number": 4,
+      "question_type": "mcq",
+      "question_text": "What represents the maximum production capabilities of an economy regarding corn and cotton?",
+      "mcq_options": [
+        {
+          "option_id": 1,
+          "text": "Opportunity Cost",
+          "is_correct": false
+        },
+        {
+          "option_id": 2,
+          "text": "Production Possibility Frontier",
+          "is_correct": true
+        },
+        {
+          "option_id": 3,
+          "text": "Demand Curve",
+          "is_correct": false
+        },
+        {
+          "option_id": 4,
+          "text": "Supply Curve",
+          "is_correct": false
+        }
+      ],
+      "ideal_answer": null
+    },
+    {
+      "question_id": "mcq_14",
+      "page_number": 4,
+      "question_type": "mcq",
+      "question_text": "What does a point lying strictly below the production possibility frontier indicate?",
+      "mcq_options": [
+        {
+          "option_id": 1,
+          "text": "Efficient resource use",
+          "is_correct": false
+        },
+        {
+          "option_id": 2,
+          "text": "Overutilization of resources",
+          "is_correct": false
+        },
+        {
+          "option_id": 3,
+          "text": "Underemployment or waste of resources",
+          "is_correct": true
+        },
+        {
+          "option_id": 4,
+          "text": "Maximized production for one good",
+          "is_correct": false
+        }
+      ],
+      "ideal_answer": null
+    },
+    {
+      "question_id": "saq_15",
+      "page_number": 4,
+      "question_type": "saq",
+      "question_text": "Define opportunity cost in the context of production alternatives.",
+      "mcq_options": null,
+      "ideal_answer": "Opportunity cost refers to the value of the next best alternative that must be forgone when choosing to produce more of one good over another, illustrating the trade-off between different production options."
+    },
+    {
+      "question_id": "saq_16",
+      "page_number": 4,
+      "question_type": "saq",
+      "question_text": "What role does a centrally planned economy have in economic activities?",
+      "mcq_options": null,
+      "ideal_answer": "In a centrally planned economy, the government or central authority makes all important decisions regarding production, exchange, and consumption, aiming to achieve a desirable allocation of resources for society."
+    },
+    {
+      "question_id": "mcq_17",
+      "page_number": 5,
+      "question_type": "mcq",
+      "question_text": "What is one of the roles of government in a market economy?",
+      "mcq_options": [
+        {
+          "option_id": 1,
+          "text": "To completely control the production of all goods and services",
+          "is_correct": false
+        },
+        {
+          "option_id": 2,
+          "text": "To encourage adequate production of essential services",
+          "is_correct": true
+        },
+        {
+          "option_id": 3,
+          "text": "To eliminate all forms of market interaction",
+          "is_correct": false
+        },
+        {
+          "option_id": 4,
+          "text": "To ensure that all individuals meet in a physical marketplace",
+          "is_correct": false
+        }
+      ],
+      "ideal_answer": null
+    },
+    {
+      "question_id": "mcq_18",
+      "page_number": 5,
+      "question_type": "mcq",
+      "question_text": "What does the price of a good in a market system signify?",
+      "mcq_options": [
+        {
+          "option_id": 1,
+          "text": "The government's fixed cost of production",
+          "is_correct": false
+        },
+        {
+          "option_id": 2,
+          "text": "Society's overall valuation of the good",
+          "is_correct": true
+        },
+        {
+          "option_id": 3,
+          "text": "The amount of goods produced in the last year",
+          "is_correct": false
+        },
+        {
+          "option_id": 4,
+          "text": "The total demand from suppliers",
+          "is_correct": false
+        }
+      ],
+      "ideal_answer": null
+    },
+    {
+      "question_id": "saq_19",
+      "page_number": 5,
+      "question_type": "saq",
+      "question_text": "Define a market as it is understood in economics.",
+      "mcq_options": null,
+      "ideal_answer": "In economics, a market is an institution that organizes the free interaction of individuals pursuing their respective economic activities, allowing for the exchange of goods and services."
+    },
+    {
+      "question_id": "mcq_20",
+      "page_number": 6,
+      "question_type": "mcq",
+      "question_text": "What is the main focus of microeconomics as described in the text?",
+      "mcq_options": [
+        {
+          "option_id": 1,
+          "text": "Aggregate economic performance",
+          "is_correct": false
+        },
+        {
+          "option_id": 2,
+          "text": "Behaviour of individual economic agents",
+          "is_correct": true
+        },
+        {
+          "option_id": 3,
+          "text": "Government economic policies",
+          "is_correct": false
+        },
+        {
+          "option_id": 4,
+          "text": "International trade relations",
+          "is_correct": false
+        }
+      ],
+      "ideal_answer": null
+    },
+    {
+      "question_id": "mcq_21",
+      "page_number": 6,
+      "question_type": "mcq",
+      "question_text": "Which of the following best distinguishes positive economics from normative economics?",
+      "mcq_options": [
+        {
+          "option_id": 1,
+          "text": "Focus on individual markets vs aggregate economy",
+          "is_correct": false
+        },
+        {
+          "option_id": 2,
+          "text": "Studying how mechanisms function vs evaluating desirability",
+          "is_correct": true
+        },
+        {
+          "option_id": 3,
+          "text": "Analysis of historical data vs future predictions",
+          "is_correct": false
+        },
+        {
+          "option_id": 4,
+          "text": "Understanding consumer behavior vs producer behavior",
+          "is_correct": false
+        }
+      ],
+      "ideal_answer": null
+    },
+    {
+      "question_id": "saq_22",
+      "page_number": 6,
+      "question_type": "saq",
+      "question_text": "Explain the difference between microeconomics and macroeconomics as per the text.",
+      "mcq_options": null,
+      "ideal_answer": "Microeconomics studies the behavior of individual economic agents, focusing on markets for goods and services and price determination. Macroeconomics examines the economy as a whole, analyzing aggregate measures such as total output, employment, and price levels."
+    },
+    {
+      "question_id": "saq_23",
+      "page_number": 6,
+      "question_type": "saq",
+      "question_text": "What is the relationship between positive and normative economics according to the text?",
+      "mcq_options": null,
+      "ideal_answer": "The distinction between positive and normative economics is not very sharp; they are closely related. Positive economics focuses on how mechanisms function, while normative economics evaluates whether these mechanisms are desirable."
+    },
+    {
+      "question_id": "mcq_24",
+      "page_number": 7,
+      "question_type": "mcq",
+      "question_text": "Which of the following best describes a market economy?",
+      "mcq_options": [
+        {
+          "option_id": 1,
+          "text": "An economy where the government makes all economic decisions.",
+          "is_correct": false
+        },
+        {
+          "option_id": 2,
+          "text": "An economy where decisions are made based on supply and demand.",
+          "is_correct": true
+        },
+        {
+          "option_id": 3,
+          "text": "An economy that does not involve trade.",
+          "is_correct": false
+        },
+        {
+          "option_id": 4,
+          "text": "An economy that relies solely on barter systems.",
+          "is_correct": false
+        }
+      ],
+      "ideal_answer": null
+    },
+    {
+      "question_id": "mcq_25",
+      "page_number": 7,
+      "question_type": "mcq",
+      "question_text": "What does normative analysis in economics focus on?",
+      "mcq_options": [
+        {
+          "option_id": 1,
+          "text": "Objective and factual analysis of economic events.",
+          "is_correct": false
+        },
+        {
+          "option_id": 2,
+          "text": "Theoretical models explaining market behaviors.",
+          "is_correct": false
+        },
+        {
+          "option_id": 3,
+          "text": "Value judgments and opinions about economic policies.",
+          "is_correct": true
+        },
+        {
+          "option_id": 4,
+          "text": "Statistical analysis of economic data.",
+          "is_correct": false
+        }
+      ],
+      "ideal_answer": null
+    },
+    {
+      "question_id": "saq_26",
+      "page_number": 7,
+      "question_type": "saq",
+      "question_text": "Define opportunity cost in economics.",
+      "mcq_options": null,
+      "ideal_answer": "Opportunity cost is the value of the next best alternative that is forgone when making a decision. It represents the benefits that could have been obtained by choosing that alternative."
+    },
+    {
+      "question_id": "saq_27",
+      "page_number": 7,
+      "question_type": "saq",
+      "question_text": "Explain the difference between microeconomics and macroeconomics.",
+      "mcq_options": null,
+      "ideal_answer": "Microeconomics focuses on individual economic units and their interactions, such as consumers and firms, while macroeconomics studies the economy as a whole, analyzing aggregate indicators like GDP, unemployment, and inflation."
+    }
+  ]
+}
